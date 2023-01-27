@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                    },
             ),
 
-            SizedBox(width: 200,child: Text("Generated Link : $link")),
+            SizedBox(width: 200,child: SelectableText("Generated Link : $link")),
           ],
         ),
       ),
