@@ -2,9 +2,10 @@ import 'package:dynamic_link_demo/homepage.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key,required this.title, this.url}) : super(key: key);
-final String title;
-final String? url;
+  const LoginPage({Key? key, required this.title, this.url}) : super(key: key);
+  final String title;
+  final String? url;
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -15,10 +16,9 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios,
-                color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         title: const Text("Login Page"),
         automaticallyImplyLeading: false,
       ),
@@ -31,16 +31,20 @@ class _LoginPageState extends State<LoginPage> {
             Container(
               margin: const EdgeInsets.all(25),
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: Colors.blueGrey
-                ),
+                style:
+                    ElevatedButton.styleFrom(backgroundColor: Colors.blueGrey),
                 child: const Text(
                   'Profile',
                   style: TextStyle(fontSize: 20.0, color: Colors.white),
                 ),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const HomePage(title: 'From Login Page')));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const HomePage(title: 'From Login Page'),
+                    ),
+                  );
                 },
               ),
             ),

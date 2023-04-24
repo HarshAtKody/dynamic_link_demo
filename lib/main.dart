@@ -2,8 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'homepage.dart';
-import 'loginpage.dart';
+import 'package:dynamic_link_demo/homepage.dart';
+import 'package:dynamic_link_demo/loginpage.dart';
+import 'package:flutter/scheduler.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,26 +17,22 @@ void main() async {
 }
 
 void initDynamicLinks(BuildContext context) async {
-  FirebaseDynamicLinks.instance.onLink(
-      onSuccess: (PendingDynamicLinkData? dynamicLink) async {
-    final Uri? deepLink = dynamicLink?.link;
+  dynamicLinks.onLink.listen((dynamicLinkData) async {
+    final Uri? deepLink = dynamicLinkData.link;
     print("deeplink found");
     if (deepLink != null) {
       print(deepLink);
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => LoginPage(
-                  title: 'firebase_dynamic_link  navigation',
-                  url: "$deepLink")));
+      navigatorKey.currentState?.push(
+        MaterialPageRoute(
+          builder: (context) => LoginPage(
+              title: 'firebase_dynamic_link  navigation', url: "$deepLink"),
+        ),
+      );
     }
-  }, onError: (OnLinkErrorException e) async {
-    if (kDebugMode) {
+  }, onError: (e) async {
       print("deeplink error");
-    }
-    if (kDebugMode) {
       print(e.message);
-    }
+
   });
 }
 
@@ -44,17 +45,21 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  noSuchMethod(Invocation invocation) {
-    initDynamicLinks(context);
-    return super.noSuchMethod(invocation);
+  void initState() {
+    super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      initDynamicLinks(context);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: HomePage(
-          title: "Home Page From Main",
-        ));
+    return MaterialApp(
+      navigatorKey: navigatorKey,
+      debugShowCheckedModeBanner: false,
+      home: const HomePage(
+        title: "Home Page From Main",
+      ),
+    );
   }
 }
