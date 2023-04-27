@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
     String url = "https://demodylink.page.link";
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: url,
-      link: Uri.parse('$url/$docId'),
+      link: Uri.parse('https://demodylink.page.link/3N7P'),
       androidParameters: AndroidParameters(
         packageName: "com.example.dynamic_link_demo",
         minimumVersion: 0,
